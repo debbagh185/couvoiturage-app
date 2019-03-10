@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
 import {StyleSheet, Text, View, Image} from 'react-native';
 import {Form, Input, Item, Label, Button, Container } from 'native-base';
-import firebaseSvc from "../components/Db";
 import {Actions} from 'react-native-router-flux';
 import login from '../assets/images/login.png';
+import Backend from '../components/Backend';
 
 
 class LoginScreen extends Component {
@@ -47,7 +47,7 @@ class LoginScreen extends Component {
         <Button 
           success 
           style={styles.butt}
-          onPress= {() => firebaseSvc.LoginUser(this.state.myemail , this.state.mypassword)}>
+          onPress= {() => Backend.LoginUser(this.state.myemail , this.state.mypassword)}>
           <Text style={{color: 'white'}}>Login</Text>
           </Button>
           <Button 

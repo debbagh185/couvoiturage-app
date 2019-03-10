@@ -17,7 +17,7 @@ export default class ChatScreen extends React.Component {
         }}
         user={{
           _id: Backend.getUid(),
-          name: this.props.username
+          name: 'test'
         }}
       />
     );

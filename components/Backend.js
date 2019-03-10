@@ -30,6 +30,7 @@ class Backend {
       }
     });
   }
+
   setUid(value) {
     this.uid = value;
   }
@@ -96,6 +97,65 @@ class Backend {
     //var changedISODate = today.toISOString();
     console.log(changedISODate);
     return changedISODate;
+  }
+
+  LoginUser = (email,password) => {
+    try {
+      
+      firebase.auth().signInWithEmailAndPassword(email , password).
+      then(function(user){ Actions.home(user); }).
+      catch(() =>alert('Your Username or Password uncorrected!'))
+      
+    } catch (error) {
+     
+      console.log(error.toString())
+    }
+  }
+
+
+  SignupUser= (email,password) => {
+    try {
+
+      firebase.auth().createUserWithEmailAndPassword(email , password).then((user) => Actions.home(user))
+
+    } catch (error) {
+      console.log(error.toString())
+    }
+  }
+
+  readUserData() {
+    firebase.database().ref('Users/').once('value', function (snapshot) {
+        alert(snapshot.val().firstName)
+    });
+}
+
+
+  signUp = (user) => {
+
+    const{
+      firstName,
+      lastName,
+      userName,
+      email,
+      password
+    } = user;
+
+    firebase.database().ref('Users/').push({
+        firstName,
+        lastName,
+        userName,
+        email,
+        password,
+
+    }).then((data)=>{
+        //success callback
+        this.SignupUser(email, password)
+        console.log('data ' , data)
+    }).catch((error)=>{
+        //error callback
+        console.log('error ' , error)
+    });
+
   }
 }
 

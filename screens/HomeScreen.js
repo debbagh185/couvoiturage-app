@@ -1,40 +1,63 @@
-import React, { Component } from "react";
-import { View, Text, TextInput, TouchableOpacity } from "react-native";
-import { Actions } from "react-native-router-flux";
+import React, { Component } from 'react';
+import { Image, View, StyleSheet } from 'react-native';
+import { Content, Card, CardItem, Thumbnail, Text, Button, Icon, Left, Body, Right } from 'native-base';
+import proposer from '../assets/images/proposer.jpg'
+import chercher from '../assets/images/chercher.jpg'
+import path from '../assets/images/path.png'
+import search from '../assets/images/search.png'
+import {Actions} from 'react-native-router-flux'
 
-class HomeScreen extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      name: ""
-    };
-  }
+export default class HomeScreen extends Component {
   render() {
     return (
-      <View style={{ flex: 1, backgroundColor: "white", padding: 20 }}>
-        <Text>Enter Your name </Text>
-        <TextInput
-          placeholder="name"
-          value={this.state.name}
-          onChangeText={name => this.setState({ name })}
-          underlineColorAndroid="transparent"
-          style={{
-            height: 40,
-            padding: 10,
-            borderWidth: 2,
-            borderColor: "black",
-            marginTop: 20,
-            marginBottom: 20
-          }}
-        />
-        <TouchableOpacity
-          onPress={() => Actions.chat({ username: this.state.name })}
-        >
-          <Text style={{ fontSize: 20, fontWeight: "bold" }}>Next</Text>
-        </TouchableOpacity>
-      </View>
+    <View style={{flex:1}}>
+        <Content>
+          <Card>
+            <CardItem>
+              <Left>
+                <Thumbnail source={search} />
+                <Body>
+                  <Text>Chercher un trajet</Text>
+                  <Text note>description</Text>
+                </Body>
+              </Left>
+            </CardItem>
+            <CardItem cardBody>
+              <Image source={chercher} style={{height: 200, width: null, flex: 1}}/>
+            </CardItem>  
+            <Button onPress={() => Actions.chercher()} block primary>
+              <Text>Chercher un trajet</Text>
+            </Button>
+          </Card>
+            <Text light style={styles.txt}>ou</Text>
+          <Card>
+            <CardItem>
+              <Left>
+                <Thumbnail source={path} />
+                <Body>
+                  <Text>Proposer un trajet</Text>
+                  <Text note>description</Text>
+                </Body>
+              </Left>
+            </CardItem>
+            <CardItem cardBody>
+              <Image source={proposer} style={{height: 200, width: null, flex: 1}}/>
+            </CardItem>  
+            <Button onPress={() => Actions.proposer()} block primary>
+              <Text>Proposer un trajet</Text>
+            </Button>
+          </Card>
+        </Content>
+        
+    </View>
+      
+     
     );
   }
 }
 
-export default HomeScreen;
+const styles = StyleSheet.create({
+  txt: {
+    marginLeft: 220
+  },
+});

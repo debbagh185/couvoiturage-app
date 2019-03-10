@@ -1,8 +1,8 @@
 import React from 'react'
 import {StyleSheet, Text, View, Image} from 'react-native'
 import {Form, Item, Input, Button, Container, Label} from 'native-base';
-import firebaseSvc from "../components/Db";
 import signup from '../assets/images/signup.png';
+import Backend from '../components/Backend';
 
 
 export default class SignUp extends React.Component {
@@ -81,7 +81,7 @@ export default class SignUp extends React.Component {
             <Button 
             success
             style={styles.butt} 
-            onPress={() => firebaseSvc.signUp(this.state)}>
+            onPress={() => Backend.signUp(this.state)}>
             <Text style={{color: 'white'}}>Sign Up</Text>
             </Button>
           </View>
