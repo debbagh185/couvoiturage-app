@@ -1,12 +1,13 @@
 //Don't change this file 
 let link = {
-    home:"home",
-    chat:"chat",
-    proposer:"proposer",
-    chercher:"chercher",
-    home:"home",
-    login:"login",
-    signup:"signup",
-    map:"map",
+    home:"_home",
+    chat:"_chat",
+    proposer:"_proposer",
+    chercher:"_chercher",
+    home:"_home",
+    login:"_login",
+    signup:"_signup",
+    map:"_map",
+    map:"_profile",
 }
 export default link;

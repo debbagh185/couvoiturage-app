@@ -1,7 +1,7 @@
 import React from "react";
 
 import { GiftedChat } from "react-native-gifted-chat";
-import Backend from "../components/Backend";
+import ChatModel from "../components/Db/ChatModel";
 
 export default class ChatScreen extends React.Component {
   state = {
@@ -13,17 +13,17 @@ export default class ChatScreen extends React.Component {
       <GiftedChat
         messages={this.state.messages}
         onSend={message => {
-          Backend.sendMessage(message);
+          ChatModel.sendMessage(message);
         }}
         user={{
-          _id: Backend.getUid(),
+          _id: ChatModel.getUid(),
           name: 'test'
         }}
       />
     );
   }
   componentDidMount() {
-    Backend.loadMessages(message => {
+    ChatModel.loadMessages(message => {
       this.setState(previousState => {
         return {
           messages: GiftedChat.append(previousState.messages, message)
@@ -32,6 +32,6 @@ export default class ChatScreen extends React.Component {
     });
   }
   componentWillUnmount() {
-    Backend.closeChat();
+    ChatModel.closeChat();
   }
 }

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Router, Stack, Scene, Drawer } from "react-native-router-flux";
+import { Router, Scene, Drawer } from "react-native-router-flux";
 import {Container} from 'native-base';
 import LoginScreen from './screens/LoginScreen';
 import SignUpScreen from './screens/SignUpScreen';
@@ -10,13 +10,18 @@ import ChercherTrajetScreen from './screens/ChercherTrajet/ChercherTrajetScreen'
 import ProposerTrajetScreen from './screens/ProposerTrajet/ProposerTrajetScreen';
 import MenuScreen from './screens/MenuScreen';
 import MapScreen from './screens/MapScreen'
+import {StyleSheet} from 'react-native'
+import ProfileScreen from './screens/ProfileScreen';
+import ListTrajetScreen from './screens/ChercherTrajet/ListeTrajetScreen';
+import MenuBackIcon from './assets/images/back.png'
+
 
 export default class MainComponent extends Component {
 
   constructor(){
     super();
     this.state=({
-      isReady: false
+      isReady: false,
     })
   }
 
@@ -34,28 +39,43 @@ export default class MainComponent extends Component {
       return <Expo.AppLoading />;
       }
     return (
-      <Container>
-          <Router>
-              <Stack key='root'>
-                  <Drawer
-                  hideNavBar
-                  key="drawerMenu"
-                  contentComponent={MenuScreen}
-                  drawerWidth={250}
-                  drawerPosition="left">
-                  <Scene key='login' component={LoginScreen} title='Login'/>
-                  <Scene initial key='home' component={HomeScreen} title='Home'/>
-                  <Scene key='chat' component={ChatScreen} title='Chat'/>
-                  <Scene key='signup' component={SignUpScreen} title='Sign Up'/>
-                  <Scene key='chercher' component={ChercherTrajetScreen} title='Chercher un trajet'/>
-                  <Scene key='proposer' component={ProposerTrajetScreen} title='Proposer un trajet'/>
-                  <Scene key='map' component={MapScreen} title='Map'/>
-                  </Drawer>
-              </Stack>
-          </Router>
-      </Container>
+    <Container>
+      <Router>
+          <Scene key='root'>
+              <Drawer
+              hideNavBar
+              hideTabBar
+              key="drawerMenu"
+              contentComponent={MenuScreen}
+              backButtonImage={MenuBackIcon}
+              drawerWidth={250}
+              drawerPosition="left">
+              <Scene key='_profile' component={ProfileScreen} title='Profile'/>
+              <Scene key='_login' component={LoginScreen} title='Login'/>
+              <Scene initial key='_home' component={HomeScreen} title='Home'/>
+              <Scene key='_chat' component={ChatScreen} title='Chat'/>
+              <Scene key='_signup' component={SignUpScreen} title='Sign Up'/>
+              <Scene key='_chercher' component={ChercherTrajetScreen} title='Chercher un trajet'/>
+              <Scene key='_proposer' component={ProposerTrajetScreen} title='Proposer un trajet'/>
+              <Scene key='_list' component={ListTrajetScreen} title='Liste des trajets'/>
+              <Scene key='_map' component={MapScreen} title='Map'/>
+              </Drawer>
+          </Scene>
+      </Router>
+  </Container>
+
     )
   }
 }
 
+
+const styles=StyleSheet.create({
+  
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#F5FCFF',
+  },
+});
 

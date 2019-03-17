@@ -3,14 +3,14 @@ import {StyleSheet, Text, View, Image} from 'react-native';
 import {Form, Input, Item, Label, Button, Container } from 'native-base';
 import {Actions} from 'react-native-router-flux';
 import login from '../assets/images/login.png';
-import Backend from '../components/Backend';
+import {connect} from 'react-redux';
+import {loginUser} from '../actions/Index';
 
 
 class LoginScreen extends Component {
 
   constructor(props) {
     super(props)
-
     this.state= ({
       myemail: "",
       mypassword: ""
@@ -25,19 +25,19 @@ class LoginScreen extends Component {
           <Image source={login} />
           <Form>
           <Item floatingLabel style={styles.item}>
-            <Label>Email</Label>
             <Input
               autoCapitalize="none"
-              autoCorrect={false}
+              placeholder="Email"
+              autoCorrect={true}
               onChangeText= {(email) => this.setState({['myemail']: email})}
             />
           </Item>
           <Item floatingLabel style={styles.item}>
-            <Label>Password</Label>
             <Input
               secureTextEntry={true}
               autoCapitalize="none"
-              autoCorrect={false}
+              autoCorrect
+              placeholder="Password"
               onChangeText= {(password) => this.setState({['mypassword']: password})}
             />
           </Item>
@@ -45,17 +45,17 @@ class LoginScreen extends Component {
 
         <View>
         <Button 
-          success 
+          primary 
           style={styles.butt}
-          onPress= {() => Backend.LoginUser(this.state.myemail , this.state.mypassword)}>
+          onPress= {() => this.props.loginUser(this.state.myemail , this.state.mypassword)}>
           <Text style={{color: 'white'}}>Login</Text>
           </Button>
           <Button 
           bordered 
-          success 
+          primary 
           style={styles.butt}
           onPress={() => {
-            Actions.signup()
+            Actions._signup()
           }}
           >
           <Text style={{color: 'green'}}>Sign Up</Text>
@@ -88,4 +88,17 @@ const styles = StyleSheet.create({
 });
 
 
-export default LoginScreen;
+const mapStateToProps = (state) => {
+  return { 
+    userData: state.userData,
+    loggedin: state.loggedin
+  };
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return { 
+    loginUser: (email, password) => dispatch(loginUser(email, password))
+  };
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(LoginScreen);

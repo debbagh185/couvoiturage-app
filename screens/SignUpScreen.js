@@ -1,11 +1,12 @@
 import React from 'react'
 import {StyleSheet, Text, View, Image} from 'react-native'
-import {Form, Item, Input, Button, Container, Label} from 'native-base';
+import {Form, Item, Input, Button, Container, Label, Content, Left, Body} from 'native-base';
 import signup from '../assets/images/signup.png';
-import Backend from '../components/Backend';
+import {connect} from 'react-redux';
+import {createUser} from '../actions/Index';
 
 
-export default class SignUp extends React.Component {
+class SignUp extends React.Component {
 
  constructor(props) {
 
@@ -26,66 +27,65 @@ export default class SignUp extends React.Component {
   }
 
   render() {
-
-   
-          
+  
     return (
-      <Container style={styles.container}>
-         <Image source={signup} />
-          <Form style={styles.form}>
+      <View style={styles.container}>
+        <Content>
+          <Left />
+          <Body>
+             <Image source={signup} />
+          </Body>
+          <Form>
             <Item floatingLabel style={styles.item}>
-            <Label>First Name</Label>
               <Input 
+              placeholder="First Name"
               autoCapitalize="none"
-              autoCorrect={false} 
-                
+              autoCorrect={false}   
               onChangeText={(val) => this.onChangeText('firstName', val)} />
             </Item>
             <Item floatingLabel style={styles.item}>
-            <Label>Last Name</Label>
               <Input 
+              placeholder="Last Name"
               autoCapitalize="none"
-              autoCorrect={false} 
-              
+              autoCorrect
               onChangeText={(val) => this.onChangeText('lastName', val)}/>
             </Item>
             <Item floatingLabel style={styles.item}>
-            <Label>Username</Label>
               <Input 
+              placeholder="Username"
               autoCapitalize="none"
-              autoCorrect={false} 
-              
+              autoCorrect 
               onChangeText={(val) => this.onChangeText('userName', val)}/>
             </Item>
             <Item floatingLabel style={styles.item}>
-            <Label>Email</Label>
               <Input 
+              placeholder="Email"
               autoCapitalize="none"
               autoCorrect={false} 
               
               onChangeText={(val) => this.onChangeText('email', val)}/>
             </Item>
             <Item floatingLabel style={styles.item}>
-            <Label>Password</Label>
               <Input
+              placeholder="Password"
                 autoCapitalize="none"
-                autoCorrect={false}
-               
+                autoCorrect
                 secureTextEntry={true}
                 onChangeText={(val) => this.onChangeText('password', val)}
                />
             </Item>
-          </Form>
-
-          <View>
+            <Left />
+            <Body>
             <Button 
-            success
+            primary
             style={styles.butt} 
-            onPress={() => Backend.signUp(this.state)}>
+            onPress={() => this.props.createUser(this.state)}>
             <Text style={{color: 'white'}}>Sign Up</Text>
             </Button>
-          </View>
-      </Container>
+            </Body>
+          </Form>
+        </Content>
+      </View>
 
     )
   }
@@ -104,8 +104,22 @@ const styles = StyleSheet.create({
   },
 
   butt: {
-    marginTop: 20,
+    marginTop: 40,
     justifyContent: 'center',
     width: 150,
   },
 });
+
+const mapStateToProps = (state) => {
+  return { 
+    userData: state.userData
+  };
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return { 
+    createUser: (user) => dispatch(createUser(user))
+  };
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(SignUp);
