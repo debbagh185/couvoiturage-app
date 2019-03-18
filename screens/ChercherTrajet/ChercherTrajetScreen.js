@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import {Text, StyleSheet, TouchableOpacity} from 'react-native';
 import DateTimePicker from 'react-native-modal-datetime-picker';
-import { View, Form, Input, Item, Label, Button, Container,} from 'native-base';
+import { View, Form, Input, Item, Label, Button, Container, Icon, Left, Body,} from 'native-base';
 import moment from 'moment';
 import {Actions} from 'react-native-router-flux';
 
@@ -54,12 +54,10 @@ export default class ChercherTrajetScreen extends Component {
             />
           </Item>
         </Form>
-
         <TouchableOpacity onPress={this.showPicker} style= {styles.text}>
-          <Text>Date et heure</Text>
-          <Text>{this.state.chosenDate}</Text>
+            <Text><Icon name="clock" /> Date et heure</Text>
+            <Text style={{color: "blue", fontSize:15}}>{this.state.chosenDate}</Text>
         </TouchableOpacity>
-
         <View>
           <Button 
             primary 
@@ -68,8 +66,7 @@ export default class ChercherTrajetScreen extends Component {
           >
             <Text style={{color: 'white'}}>Continuer</Text>
           </Button>
-        </View>
-        
+        </View>    
         <DateTimePicker
           isVisible={this.state.isVisible}
           onConfirm={this.handlePicker}
@@ -85,6 +82,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
+    justifyContent: 'center',
   },
 
   item: {

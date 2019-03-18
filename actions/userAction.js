@@ -1,5 +1,6 @@
 import * as firebase from "firebase";
 import { Actions } from "react-native-router-flux";
+import objects from '../constants/objects'
 
 if (!firebase.apps.length) { //avoid re-initializing
   firebase.initializeApp({
@@ -33,13 +34,33 @@ export const SignUpUser = () => {
     };
   };
 
-  export const Login = () => {
+export const Login = () => {
     return {
       type: "LoginUser",
       value: {}
     };
   };
 
+export const AddCitiesObjects = () => {
+    return {
+      type: "AddCitiesObjects",
+    };
+  };
+
+
+export const addCities = () => {
+    return function(dispatch) {
+      objects.Cities.map((item,index) => {
+        firebase.database().ref('cities/' + index).set({
+        name: item.name,
+        lng: item.lng,
+        lat : item.lat
+      });
+      });
+      var actionAddCitiesObjects = AddCitiesObjects();
+      dispatch(actionAddCitiesObjects);                  
+  }
+};
 
 export const watchUserData = () => {
     return function(dispatch) {

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Image, View, StyleSheet } from 'react-native';
+import { Image, View, StyleSheet, TouchableOpacity } from 'react-native';
 import { Content, Card, CardItem, Thumbnail, Text, Button,Left, Body} from 'native-base';
 import proposer from '../assets/images/proposer.jpg'
 import chercher from '../assets/images/chercher.jpg'
@@ -24,6 +24,7 @@ class HomeScreen extends Component {
       return (
         <View style={{flex:1}}>
           <Content>
+          <TouchableOpacity onPress={() => Actions._chercher()} >
             <Card>
               <CardItem>
                 <Left>
@@ -41,6 +42,8 @@ class HomeScreen extends Component {
                 <Text>Chercher un trajet</Text>
               </Button>
             </Card>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => Actions._proposer()} >
             <Card>
               <CardItem>
                 <Left>
@@ -58,6 +61,7 @@ class HomeScreen extends Component {
                 <Text>Proposer un trajet</Text>
               </Button>
             </Card>
+            </TouchableOpacity>
           </Content>
           {!this.props.loggedin && <FooterComp page={Actions.currentScene}/>}
       </View>

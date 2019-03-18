@@ -14,15 +14,18 @@ import {StyleSheet} from 'react-native'
 import ProfileScreen from './screens/ProfileScreen';
 import ListTrajetScreen from './screens/ChercherTrajet/ListeTrajetScreen';
 import MenuBackIcon from './assets/images/back.png'
+import {connect} from 'react-redux';
+import {addCities} from './actions/Index';
 
 
-export default class MainComponent extends Component {
+class MainComponent extends Component {
 
-  constructor(){
-    super();
+  constructor(props){
+    super(props);
     this.state=({
       isReady: false,
     })
+    this.props.addCities();
   }
 
   async componentWillMount() {
@@ -79,3 +82,17 @@ const styles=StyleSheet.create({
   },
 });
 
+const mapStateToProps = (state) => {
+  return { 
+    userData: state.userData,
+    loggedin: state.loggedin
+  };
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return { 
+    addCities: () => dispatch(addCities())
+  };
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(MainComponent);
