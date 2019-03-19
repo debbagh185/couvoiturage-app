@@ -29,12 +29,10 @@ class SignUp extends React.Component {
   render() {
   
     return (
-      <View style={styles.container}>
         <Content>
           <Left />
           <Body>
              <Image source={signup} />
-          </Body>
           <Form>
             <Item floatingLabel style={styles.item}>
               <Input 
@@ -74,19 +72,19 @@ class SignUp extends React.Component {
                 onChangeText={(val) => this.onChangeText('password', val)}
                />
             </Item>
-            <Left />
-            <Body>
+          </Form>
+          <Left />
+          <Body>
             <Button 
             primary
             style={styles.butt} 
             onPress={() => this.props.createUser(this.state)}>
             <Text style={{color: 'white'}}>Sign Up</Text>
             </Button>
-            </Body>
-          </Form>
+          </Body>
+          
+          </Body>
         </Content>
-      </View>
-
     )
   }
 }

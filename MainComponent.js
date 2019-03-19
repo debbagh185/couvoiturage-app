@@ -15,7 +15,7 @@ import ProfileScreen from './screens/ProfileScreen';
 import ListTrajetScreen from './screens/ChercherTrajet/ListeTrajetScreen';
 import MenuBackIcon from './assets/images/back.png'
 import {connect} from 'react-redux';
-import {addCities} from './actions/Index';
+import {prepareDatabase} from './actions/Index';
 
 
 class MainComponent extends Component {
@@ -25,7 +25,7 @@ class MainComponent extends Component {
     this.state=({
       isReady: false,
     })
-    this.props.addCities();
+    this.props.prepareDatabase();
   }
 
   async componentWillMount() {
@@ -91,7 +91,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return { 
-    addCities: () => dispatch(addCities())
+    prepareDatabase: () => dispatch(prepareDatabase())
   };
 }
 

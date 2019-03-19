@@ -13,7 +13,7 @@ class ProfileScreen extends Component {
       <Container>
         <Tabs>
           <Tab heading="Profil">
-                <Text>{this.props.userData.email}</Text>
+                <Text>{this.props.userData.id}</Text>
           </Tab>
           <Tab heading="Les trajets">
              

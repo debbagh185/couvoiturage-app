@@ -31,7 +31,7 @@ class HomeScreen extends Component {
                   <Thumbnail source={search} />
                   <Body>
                     <Text>Chercher un trajet</Text>
-                    <Text note>description</Text>
+                    <Text note>{this.props.userData.lat}</Text>
                   </Body>
                 </Left>
               </CardItem>
@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
 const mapStateToProps = (state) => {
   return { 
     userData: state.userData,
-    loggedin: state.loggedin
+    loggedin: state.loggedin,
   };
 }
 

@@ -1,17 +1,26 @@
 import React, { Component } from 'react'
 import {Text, StyleSheet, TouchableOpacity} from 'react-native';
 import DateTimePicker from 'react-native-modal-datetime-picker';
-import { View, Form, Input, Item, Label, Button, Container, Icon, Left, Body,} from 'native-base';
+import {Form,Button, Content, Icon, Container} from 'native-base';
 import moment from 'moment';
 import {Actions} from 'react-native-router-flux';
+import {connect} from 'react-redux';
+import SearchableDropdown from 'react-native-searchable-dropdown'
+import objects from '../../constants/objects'
 
-export default class ChercherTrajetScreen extends Component {
+//Item array for the dropdown
+var items = objects.Cities;
 
-  constructor() {
-    super()
+class ChercherTrajetScreen extends Component {
+
+  constructor(props) {
+    super(props)
     this.state = {
       isVisible: false,
       chosenDate: '',
+      serverData: [],
+      departCity: {},
+      destCity: {}
     }
   }
 
@@ -30,50 +39,94 @@ export default class ChercherTrajetScreen extends Component {
     })
   };
 
-
   render() {
     return (
-      <Container style= {styles.container}>
+      <Container style={styles.container}>
+        <Content>
         <Text style={styles.text}>Trouver un trajet</Text>
         <Form>
-          <Item inlineLabel style={styles.item}>
-            <Label>Départ</Label>
-            <Input
-              autoCapitalize="none"
-              autoCorrect={false}
-              //onChangeText= {(email) => this.setState({['myemail']: email})}
-            />
-          </Item>
+          <Text note>Départ</Text>
+            <SearchableDropdown
+              onTextChange={(depart) => {
+                console.log(depart)
+              }}
+              onItemSelect={depart => this.setState({departCity: depart})}
+              containerStyle={{ padding: 5 }}
+              textInputStyle={{
+                padding: 12,
+                borderWidth: 1,
+                borderColor: '#ccc',
+                borderRadius: 5,
+              }}
+              itemStyle={{
+                padding: 10,
+                marginTop: 2,
+                backgroundColor: '#ddd',
+                borderColor: '#bbb',
+                borderWidth: 1,
+                borderRadius: 5,
+              }}
+              itemTextStyle={{ color: '#222' }}
+              itemsContainerStyle={{ maxHeight: 140 }}
+              items={items}
+              defaultIndex={2}
+              placeholder="Départ"
+              resetValue={false}
+              underlineColorAndroid="transparent"
+              />    
+          <Text note>Destination</Text>   
+          <SearchableDropdown
+              onTextChange={(dest) => {
+                console.log(dest)
+              }}
+              onItemSelect={dest => this.setState({destCity: dest})}
+              containerStyle={{ padding: 5 }}
+              textInputStyle={{
+                padding: 12,
+                borderWidth: 1,
+                borderColor: '#ccc',
+                borderRadius: 5,
+              }}
+              itemStyle={{
+                padding: 10,
+                marginTop: 2,
+                backgroundColor: '#ddd',
+                borderColor: '#bbb',
+                borderWidth: 1,
+                borderRadius: 5,
+              }}
+              itemTextStyle={{ color: '#222' }}
+              itemsContainerStyle={{ maxHeight: 140 }}
+              items={items}
+              defaultIndex={2}
+              placeholder="Destination"
+              resetValue={false}
+              underlineColorAndroid="transparent"
+              />
 
-          <Item inlineLabel style={styles.item}>
-            <Label>Destination</Label>
-            <Input
-              autoCapitalize="none"
-              autoCorrect={false}
-              //onChangeText= {(password) => this.setState({['mypassword']: password})}
-            />
-          </Item>
-        </Form>
         <TouchableOpacity onPress={this.showPicker} style= {styles.text}>
             <Text><Icon name="clock" /> Date et heure</Text>
             <Text style={{color: "blue", fontSize:15}}>{this.state.chosenDate}</Text>
         </TouchableOpacity>
-        <View>
-          <Button 
-            primary 
-            style={styles.butt}
-            onPress= {() => Actions._list()}
-          >
-            <Text style={{color: 'white'}}>Continuer</Text>
-          </Button>
-        </View>    
         <DateTimePicker
           isVisible={this.state.isVisible}
           onConfirm={this.handlePicker}
           onCancel={this.hidePicker}
           mode={"datetime"}
         />
+          <Button 
+            rounded
+            block
+            primary 
+            onPress= {() => 0}
+          >
+            <Text style={{color: 'white'}}>Continuer</Text>
+          </Button>  
+        
+        </Form> 
+      </Content>
       </Container>
+      
     )
   }
 }
@@ -99,3 +152,17 @@ const styles = StyleSheet.create({
     width: 150,
   },
 });
+
+const mapStateToProps = (state) => {
+  return { 
+     
+  };
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return { 
+     
+  };
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(ChercherTrajetScreen);
