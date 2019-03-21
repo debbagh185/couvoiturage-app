@@ -9,13 +9,14 @@ import {Actions} from 'react-native-router-flux'
 import FooterComp from '../components/FooterComp';
 import LoadingComp from '../components/LoadingComp';
 import {connect} from 'react-redux';
-import {watchUserData} from '../actions/UserActions';
+import {watchUserData, testAuth} from '../actions/UserActions';
 
 class HomeScreen extends Component {
   constructor(props){
     super(props);
-    if(this.props.loggedin) this.props.watchUserData();
+    this.props.testAuth();
  }
+
 
   render() { 
     if (false) {
@@ -31,7 +32,7 @@ class HomeScreen extends Component {
                   <Thumbnail source={search} />
                   <Body>
                     <Text>Chercher un trajet</Text>
-                    <Text note>{this.props.userData.lat}</Text>
+                    <Text note>description</Text>
                   </Body>
                 </Left>
               </CardItem>
@@ -75,14 +76,15 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state) => {
   return { 
-    userData: state.userData,
-    loggedin: state.loggedin,
+    userData: state.User.userData,
+    loggedin: state.User.loggedin,
   };
 }
 
 const mapDispatchToProps = (dispatch) => {
   return { 
-    watchUserData: () => dispatch(watchUserData())
+    watchUserData: () => dispatch(watchUserData()),
+    testAuth: () => dispatch(testAuth()),
   };
 }
 

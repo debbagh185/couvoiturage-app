@@ -10,12 +10,11 @@ import {
 import { Actions } from "react-native-router-flux";
 import links from "../constants/LinksName";
 import {connect} from 'react-redux';
-import {watchUserData, signOut} from '../actions/UserActions';
+import {signOut} from '../actions/UserActions';
 
 class MenuScreen extends Component {
   constructor(props) {
     super(props);
-    if(this.props.loggedin) this.props.watchUserData();
   }
 
 
@@ -68,14 +67,12 @@ class MenuScreen extends Component {
 
 const mapStateToProps = (state) => {
   return { 
-    userData: state.userData,
-    loggedin : state.loggedin
+    loggedin : state.User.loggedin
   };
 }
 
 const mapDispatchToProps = (dispatch) => {
   return { 
-    watchUserData: () => dispatch(watchUserData()),
     signOutUser: () => dispatch(signOut())
   };
 }

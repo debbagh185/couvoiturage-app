@@ -1,5 +1,6 @@
 import * as firebase from "firebase";
 import { Actions } from "react-native-router-flux";
+import store from '../store/configureStore'
 
 if (!firebase.apps.length) { //avoid re-initializing
   firebase.initializeApp({
@@ -28,22 +29,32 @@ export const signOutUser = () => {
 
 export const SignUpUser = () => {
     return {
-      type: "SignUpUser",
-      value: {}
+      type: "SignUpUser"
     };
   };
 
 export const Login = () => {
     return {
-      type: "LoginUser",
-      value: {}
+      type: "LoginUser"
     };
   };
+
+export const testAuth = () => {
+  return function(dispatch) {
+  firebase.auth().onAuthStateChanged(user => {
+    if (user) {
+      watchUserData();
+      var ActionLoginUser=Login();
+      dispatch(ActionLoginUser);
+    }
+  });
+}
+}
 
 
 export const watchUserData = () => {
     return function(dispatch) {
-                let uid = firebase.auth().currentUser.uid;
+                let uid=firebase.auth().currentUser.uid;
                 firebase.database().ref(`Users/${uid}`).on('value', function (snapshot)
                   { 
                         var userData = snapshot.val();

@@ -7,6 +7,7 @@ import {Actions} from 'react-native-router-flux';
 import {connect} from 'react-redux';
 import SearchableDropdown from 'react-native-searchable-dropdown'
 import objects from '../../constants/objects'
+import KeyboardShift from '../../components/KeyboardShift';
 
 //Item array for the dropdown
 var items = objects.Cities;
@@ -41,7 +42,9 @@ class ChercherTrajetScreen extends Component {
 
   render() {
     return (
-      <Container style={styles.container}>
+      <KeyboardShift> 
+        {()=>(
+        <Container style={styles.container}>
         <Content>
         <Text style={styles.text}>Trouver un trajet</Text>
         <Form>
@@ -126,6 +129,9 @@ class ChercherTrajetScreen extends Component {
         </Form> 
       </Content>
       </Container>
+      )}
+    </KeyboardShift>
+      
       
     )
   }

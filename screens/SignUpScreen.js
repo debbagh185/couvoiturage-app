@@ -108,16 +108,10 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = (state) => {
-  return { 
-    userData: state.userData
-  };
-}
-
 const mapDispatchToProps = (dispatch) => {
   return { 
     createUser: (user) => dispatch(createUser(user))
   };
 }
 
-export default connect(mapStateToProps,mapDispatchToProps)(SignUp);
+export default connect(null,mapDispatchToProps)(SignUp);

@@ -3,8 +3,7 @@ import { Router, Scene, Drawer } from "react-native-router-flux";
 import {Container} from 'native-base';
 import LoginScreen from './screens/LoginScreen';
 import SignUpScreen from './screens/SignUpScreen';
-import HomeScreen from './screens/HomeScreen'
-import * as Expo from 'expo';
+import HomeScreen from './screens/HomeScreen';
 import ChatScreen from './screens/ChatScreen';
 import ChercherTrajetScreen from './screens/ChercherTrajet/ChercherTrajetScreen';
 import ProposerTrajetScreen from './screens/ProposerTrajet/ProposerTrajetScreen';
@@ -69,3 +68,5 @@ const styles=StyleSheet.create({
     backgroundColor: '#F5FCFF',
   },
 });
+
+

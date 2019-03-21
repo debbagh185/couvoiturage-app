@@ -1,23 +1,23 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
+import KeyboardShift from '../../components/KeyboardShift';
 import {Text, TouchableOpacity, StyleSheet} from 'react-native';
-import { Container, Content, Form, Icon, Button, Input } from 'native-base';
+import { Form, Icon, Button, Input, Content, Container } from 'native-base';
 import DateTimePicker from 'react-native-modal-datetime-picker';
 import moment from 'moment';
-import {Actions} from 'react-native-router-flux';
-import {connect} from 'react-redux';
 import SearchableDropdown from 'react-native-searchable-dropdown';
 import objects from '../../constants/objects';
 import Slider from "react-native-slider";
 
-
 //Item array for the dropdown
 var items = objects.Cities;
-class ProposerTrajetScreen extends Component {
+
+export default class ProposerTrajetScreen extends Component {
 
   constructor(props) {
     super(props)
     this.state = {
       isVisibleGo: false,
+
       isVisibleBack: false,
       nbrplaces: 1,
       chosenDateGo: '',
@@ -56,12 +56,13 @@ class ProposerTrajetScreen extends Component {
     })
   };
 
-
   render() {
     return (
-      <Container style= {styles.container}>
+      <KeyboardShift>
+        {() => (
+      <Container style={styles.container}>
         <Content>
-          <Text style= {styles.title}>Infos de votre annonce</Text>
+            <Text style= {styles.title}>Infos de votre annonce</Text>
           <Form>
             <Text note style= {styles.text}>Départ</Text>
             <SearchableDropdown
@@ -149,13 +150,11 @@ class ProposerTrajetScreen extends Component {
               maximumValue= {4}
               step= {1}
             />
-            <Text note style= {styles.text}>Prix par place</Text>
             <Input
-              style= {styles.input}
-            ></Input>
+              placeholder="Prix par palce"
+            />
             
             <Button
-              style= {styles.butt}
               rounded
               block
               primary 
@@ -164,8 +163,10 @@ class ProposerTrajetScreen extends Component {
               <Text style={{color: 'white'}}>Continuer</Text>
             </Button> 
           </Form>
-        </Content>
-      </Container>
+          </Content>
+        </Container>
+        )}
+      </KeyboardShift>
     );
   }
 }
@@ -176,7 +177,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-
+  
   text: {
     marginTop: 15,
   },
@@ -199,17 +200,3 @@ const styles = StyleSheet.create({
     marginTop: 30,
   },
 });
-
-const mapStateToProps = (state) => {
-  return { 
-     
-  };
-}
-
-const mapDispatchToProps = (dispatch) => {
-  return { 
-     
-  };
-}
-
-export default connect(mapStateToProps,mapDispatchToProps)(ProposerTrajetScreen);

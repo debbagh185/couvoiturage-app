@@ -19,8 +19,8 @@ export default (state=initialState, action) =>
         {
             case "SetUserData" : return { ...state, userData: action.value };
             case "SignOutUser" : return { ...state, userData: action.value, loggedin : false };
-            case "SignUpUser" : return { ...state, userData: action.value, loggedin: true};
-            case "LoginUser" : return { ...state, userData: action.value, loggedin: true };
+            case "SignUpUser" : return { ...state};
+            case "LoginUser" : return { ...state, loggedin: true};
             case "PrepareDatabase" : return { ...state};   
             default: 
               return state;

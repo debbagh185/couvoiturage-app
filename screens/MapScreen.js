@@ -6,7 +6,7 @@ import demo from '../constants/Demo';
 import MapViewDirection from "react-native-maps-directions";
 import { Button, Text } from "native-base";
 import { Actions } from "react-native-router-flux";
-class HomeScreen extends Component {
+class MapScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -176,4 +176,4 @@ class HomeScreen extends Component {
   }
 }
 
-export default HomeScreen;
+export default MapScreen;
