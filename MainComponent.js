@@ -14,33 +14,21 @@ import {StyleSheet} from 'react-native'
 import ProfileScreen from './screens/ProfileScreen';
 import ListTrajetScreen from './screens/ChercherTrajet/ListeTrajetScreen';
 import MenuBackIcon from './assets/images/back.png'
-import {connect} from 'react-redux';
-import {prepareDatabase} from './actions/Index';
 
 
-class MainComponent extends Component {
+
+export default class MainComponent extends Component {
 
   constructor(props){
     super(props);
     this.state=({
-      isReady: false,
+       
     })
-    this.props.prepareDatabase();
+    
   }
 
-  async componentWillMount() {
-    await Expo.Font.loadAsync({
-    Roboto: require("native-base/Fonts/Roboto.ttf"),
-    Roboto_medium: require("native-base/Fonts/Roboto_medium.ttf"),
-    Ionicons: require("@expo/vector-icons/fonts/Ionicons.ttf")
-    });
-    this.setState({ isReady: true });
-    }
-
   render() {
-    if (!this.state.isReady) {
-      return <Expo.AppLoading />;
-      }
+    
     return (
     <Container>
       <Router>
@@ -81,18 +69,3 @@ const styles=StyleSheet.create({
     backgroundColor: '#F5FCFF',
   },
 });
-
-const mapStateToProps = (state) => {
-  return { 
-    userData: state.userData,
-    loggedin: state.loggedin
-  };
-}
-
-const mapDispatchToProps = (dispatch) => {
-  return { 
-    prepareDatabase: () => dispatch(prepareDatabase())
-  };
-}
-
-export default connect(mapStateToProps,mapDispatchToProps)(MainComponent);

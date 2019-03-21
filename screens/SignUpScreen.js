@@ -3,7 +3,7 @@ import {StyleSheet, Text, View, Image} from 'react-native'
 import {Form, Item, Input, Button, Container, Label, Content, Left, Body} from 'native-base';
 import signup from '../assets/images/signup.png';
 import {connect} from 'react-redux';
-import {createUser} from '../actions/Index';
+import {createUser} from '../actions/UserActions';
 
 
 class SignUp extends React.Component {

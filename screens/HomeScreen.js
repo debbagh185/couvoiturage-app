@@ -9,7 +9,7 @@ import {Actions} from 'react-native-router-flux'
 import FooterComp from '../components/FooterComp';
 import LoadingComp from '../components/LoadingComp';
 import {connect} from 'react-redux';
-import {watchUserData} from '../actions/Index';
+import {watchUserData} from '../actions/UserActions';
 
 class HomeScreen extends Component {
   constructor(props){

@@ -4,7 +4,7 @@ import {Form, Input, Item, Label, Button, Container } from 'native-base';
 import {Actions} from 'react-native-router-flux';
 import login from '../assets/images/login.png';
 import {connect} from 'react-redux';
-import {loginUser} from '../actions/Index';
+import {loginUser} from '../actions/UserActions';
 
 
 class LoginScreen extends Component {

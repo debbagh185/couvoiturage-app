@@ -10,7 +10,7 @@ import {
 import { Actions } from "react-native-router-flux";
 import links from "../constants/LinksName";
 import {connect} from 'react-redux';
-import {watchUserData, signOut} from '../actions/Index';
+import {watchUserData, signOut} from '../actions/UserActions';
 
 class MenuScreen extends Component {
   constructor(props) {

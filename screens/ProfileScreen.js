@@ -1,19 +1,19 @@
 import React, { Component } from 'react';
 import { Container, Tab, Tabs, Text } from 'native-base';
-import {connect} from 'react-redux';
-import {watchUserData} from '../actions/Index';
+import store from '../store/configureStore'
 
-class ProfileScreen extends Component {
+
+export default class ProfileScreen extends Component {
   constructor(props){
     super(props);
-    this.props.watchUserData();
+   
  }
   render() {
     return (
       <Container>
         <Tabs>
           <Tab heading="Profil">
-                <Text>{this.props.userData.id}</Text>
+                <Text>{store.getState().userData.email}</Text>
           </Tab>
           <Tab heading="Les trajets">
              
@@ -26,17 +26,3 @@ class ProfileScreen extends Component {
     );
   }
 }
-
-const mapStateToProps = (state) => {
-  return { 
-    userData: state.userData
-  };
-}
-
-const mapDispatchToProps = (dispatch) => {
-  return { 
-    watchUserData: () => dispatch(watchUserData())
-  };
-}
-
-export default connect(mapStateToProps,mapDispatchToProps)(ProfileScreen);

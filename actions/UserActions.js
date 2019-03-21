@@ -1,6 +1,5 @@
 import * as firebase from "firebase";
 import { Actions } from "react-native-router-flux";
-import objects from '../constants/objects'
 
 if (!firebase.apps.length) { //avoid re-initializing
   firebase.initializeApp({
@@ -40,115 +39,6 @@ export const Login = () => {
       value: {}
     };
   };
-
-export const PrepareDatabase = () => {
-    return {
-      type: "PrepareDatabase",
-    };
-  };
-
-export const prepareDatabase = () => {
-    return function(dispatch) {
-
-      var path=objects.Paths[0];
-      var car=objects.Cars[1];
-      var ad=objects.Ads[0];
-
-      storeCities();
-      storePath(path);
-      Depart_Path_Relationship(path);
-      Destination_Path_Relationship(path);
-      Depart_Destination_Path_Relationship(path);
-      Path_Car_Relationship(path,car);
-      Car_Path_Relationship(path,car);
-      storeAd(ad);
-      Path_Ad_Relationship(ad,path);
-     
-      //************************************************ */
-      var actionPrepareDatabase = PrepareDatabase();
-      dispatch(actionPrepareDatabase);                  
-    }
-}
-
-//Enregistrer les villes de maroc avec ses informations
-storeCities=()=>{
-  objects.Cities.map((item) => {
-    firebase.database().ref('Cities/' + item.id).set({
-    id: item.id,
-    name: item.name,
-    lng: item.lng,
-    lat : item.lat
-  });
-  });
-}
-
-//Ajouter un trajet 
-storePath=(path)=>{
-  firebase.database().ref('Paths/' + path.id).set({
-    id: path.id,
-    dateAller: path.dateAller,
-    dateRoteur: path.dateRoteur
-  })
-}
-
-//Pour trouver un trajet a partir d'une ville de depart
-Depart_Path_Relationship=(path)=>{
-  firebase.database().ref('Depart_Path/' + path.dep.id).set({
-    [path.id] : true,
-  })
-}
-
-//Pour trouver un trajet a partir d'une ville de destination
-Destination_Path_Relationship=(path)=>{
-  firebase.database().ref('Destination_Path/' + path.dest.id).set({
-    [path.id] : true,
-  })
-}
-
-//Pour trouver un trajet a partir d'une ville de destination
-Depart_Destination_Path_Relationship=(path)=>{
-  firebase.database().ref('Depart_Destination_Path/' + path.dep.id +" to "+ path.dest.id).set({
-    [path.id] : true,
-  })
-}
-
-//Ajouter un vehicule 
-storeCar=(car)=>{
-  firebase.database().ref('Cars/' + car.id).set({
-    id: car.id,
-    vehicule: car.vehicule
-  })
-}
-
-//Pour trouver un vehicule d'un trajet
-Path_Car_Relationship=(path,car)=>{
-  firebase.database().ref('Path_Car/' + path.id).set({
-    [car.id] : true,
-  })
-}
-
-//trouver un trajet a partir du vehicule
-Car_Path_Relationship=(car,path)=>{
-  firebase.database().ref('Car_Path/' + car.id).set({
-    [path.id] : true,
-  })
-}
-
-//trouver une annonce a partir d'un trajet
-Path_Ad_Relationship=(ad,path)=>{
-  firebase.database().ref('Path_Ad/' + path.id).set({
-    [ad.id] : true
-  })
-}
-
-//Ajouter une annonce
-storeAd=(ad)=>{
-  firebase.database().ref('Ad/' + ad.id).set({
-    id:ad.id,
-    prixParPlace:ad.prixParPlace,
-    nbrPlaces: ad.nbrPlaces
-  })
-}
 
 
 export const watchUserData = () => {
