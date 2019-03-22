@@ -1,13 +1,15 @@
 import React, { Component } from 'react'
-import {Text, StyleSheet, TouchableOpacity} from 'react-native';
+import {Text, StyleSheet, TouchableOpacity, View} from 'react-native';
 import DateTimePicker from 'react-native-modal-datetime-picker';
-import {Form,Button, Content, Icon, Container} from 'native-base';
+import {Form,Button, Content, Icon, Container, Spinner, Separator, Left, Body} from 'native-base';
 import moment from 'moment';
-import {Actions} from 'react-native-router-flux';
 import {connect} from 'react-redux';
 import SearchableDropdown from 'react-native-searchable-dropdown'
 import objects from '../../constants/objects'
 import KeyboardShift from '../../components/KeyboardShift';
+import {getAdsResult} from '../../actions/TrajetActions'
+import { Actions } from 'react-native-router-flux';
+ 
 
 //Item array for the dropdown
 var items = objects.Cities;
@@ -19,10 +21,29 @@ class ChercherTrajetScreen extends Component {
     this.state = {
       isVisible: false,
       chosenDate: '',
+      spinner: <Text style={{color: 'white'}}>Chercher</Text>,
       serverData: [],
-      departCity: {},
-      destCity: {}
+      path:{
+        departCity: {
+          id:"",
+          name: "",
+          lat: "",
+          lng: ""
+        },
+        destCity: {
+          id:"",
+          name: "",
+          lat: "",
+          lng: ""
+        },
+        dateAller: {
+          jour: "",
+          heure: ""
+        }
+      } 
     }
+    
+     
   }
 
   showPicker = () => {
@@ -35,25 +56,35 @@ class ChercherTrajetScreen extends Component {
 
   handlePicker = (date) => {
     this.hidePicker();
-    this.setState({
-      chosenDate: moment(date).format('D MMMM YYYY HH:mm')
-    })
+    let newPath = Object.assign({}, this.state.path);
+    newPath.dateAller.jour=moment(date).format('D MMMM YYYY');
+    newPath.dateAller.heure=moment(date).format('HH:mm');
+    this.setState({path: newPath});
   };
 
   render() {
     return (
       <KeyboardShift> 
         {()=>(
-        <Container style={styles.container}>
+        <View style={{flex:1}}>
+        <Container style={{flex:1,justifyContent:'center',padding:50}}>
         <Content>
-        <Text style={styles.text}>Trouver un trajet</Text>
         <Form>
-          <Text note>Départ</Text>
-            <SearchableDropdown
+          <View>
+            <View style={styles.view}>
+                <Separator bordered>
+                      <Text>Départ</Text>
+                </Separator> 
+                <SearchableDropdown
               onTextChange={(depart) => {
                 console.log(depart)
               }}
-              onItemSelect={depart => this.setState({departCity: depart})}
+              onItemSelect={depart => {
+                let newPath = Object.assign({}, this.state.path);
+                newPath.departCity=depart;
+                this.setState({path: newPath})
+                
+            }}
               containerStyle={{ padding: 5 }}
               textInputStyle={{
                 padding: 12,
@@ -77,63 +108,97 @@ class ChercherTrajetScreen extends Component {
               resetValue={false}
               underlineColorAndroid="transparent"
               />    
-          <Text note>Destination</Text>   
-          <SearchableDropdown
-              onTextChange={(dest) => {
-                console.log(dest)
-              }}
-              onItemSelect={dest => this.setState({destCity: dest})}
-              containerStyle={{ padding: 5 }}
-              textInputStyle={{
-                padding: 12,
-                borderWidth: 1,
-                borderColor: '#ccc',
-                borderRadius: 5,
-              }}
-              itemStyle={{
-                padding: 10,
-                marginTop: 2,
-                backgroundColor: '#ddd',
-                borderColor: '#bbb',
-                borderWidth: 1,
-                borderRadius: 5,
-              }}
-              itemTextStyle={{ color: '#222' }}
-              itemsContainerStyle={{ maxHeight: 140 }}
-              items={items}
-              defaultIndex={2}
-              placeholder="Destination"
-              resetValue={false}
-              underlineColorAndroid="transparent"
-              />
+            </View>
+            <View style={styles.view}>
+                <Separator bordered>
+                      <Text>Destination</Text>
+                </Separator>  
+                <SearchableDropdown
+                      onTextChange={(dest) => {
+                        console.log(dest)
+                      }}
+                      onItemSelect={dest => {
+                        let newPath = Object.assign({}, this.state.path);
+                        newPath.destCity=dest;
+                        this.setState({path:newPath})
+                      
+                      }}
+                      containerStyle={{ padding: 5 }}
+                      textInputStyle={{
+                        padding: 12,
+                        borderWidth: 1,
+                        borderColor: '#ccc',
+                        borderRadius: 5,
+                      }}
+                      itemStyle={{
+                        padding: 10,
+                        marginTop: 2,
+                        backgroundColor: '#ddd',
+                        borderColor: '#bbb',
+                        borderWidth: 1,
+                        borderRadius: 5,
+                      }}
+                      itemTextStyle={{ color: '#222' }}
+                      itemsContainerStyle={{ maxHeight: 140 }}
+                      items={items}
+                      defaultIndex={2}
+                      placeholder="Destination"
+                      resetValue={false}
+                      underlineColorAndroid="transparent"
+                      />
 
-        <TouchableOpacity onPress={this.showPicker} style= {styles.text}>
-            <Text><Icon name="clock" /> Date et heure</Text>
-            <Text style={{color: "blue", fontSize:15}}>{this.state.chosenDate}</Text>
-        </TouchableOpacity>
-        <DateTimePicker
-          isVisible={this.state.isVisible}
-          onConfirm={this.handlePicker}
-          onCancel={this.hidePicker}
-          mode={"datetime"}
-        />
-          <Button 
-            rounded
-            block
-            primary 
-            onPress= {() => 0}
-          >
-            <Text style={{color: 'white'}}>Continuer</Text>
-          </Button>  
+            </View>
+
+            <View style={styles.view}>
+                  <Separator bordered>
+                      <Text>Date d'aller</Text>
+                  </Separator>
+                  <TouchableOpacity onPress={this.showPicker}>
+                    <Left />
+                    <Body>
+                      <Icon name="clock" />
+                      {!this.state.path.dateAller.jour && <Text style={{color: "blue", fontSize:15}}>Selectionner une date</Text>}
+                      <Text style={{color: "blue", fontSize:15}}>{this.state.path.dateAller.jour} {this.state.path.dateAller.heure}</Text>
+                    </Body>
+                  </TouchableOpacity>
+                  <DateTimePicker
+                    isVisible={this.state.isVisible}
+                    onConfirm={this.handlePicker}
+                    onCancel={this.hidePicker}
+                    mode={"datetime"}
+                  />
+            </View>
+              
+            <View style={styles.view}>
+                <Button 
+                    rounded
+                    block
+                    primary 
+                    onPress= {() => {
+                      //console.log(this.state.path)
+                      this.props.getAdsResult(this.state.path)
+                      this.setState({spinner: <Spinner color='blue' />})
+                      setTimeout(()=>{
+                        if(this.props.success) {Actions._list()}
+                        else {
+                          this.setState({spinner: <Text style={{color: 'white'}}>Chercher</Text>})
+                          alert("Problem de connexion internet, réessayer!")
+                        }
+                      }, 5000);
+                    }}
+                  >
+                  {this.state.spinner}
+              </Button>  
+          </View>
         
+        </View>
         </Form> 
       </Content>
       </Container>
+      </View>
       )}
-    </KeyboardShift>
-      
-      
-    )
+    </KeyboardShift>  
+    );
   }
 }
 
@@ -161,13 +226,14 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state) => {
   return { 
-     
+     Ads: state.Trajet.SearchResult,
+     success: state.Trajet.success
   };
 }
 
 const mapDispatchToProps = (dispatch) => {
   return { 
-     
+    getAdsResult: (path) => dispatch(getAdsResult(path))
   };
 }
 

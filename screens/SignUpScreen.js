@@ -1,9 +1,10 @@
 import React from 'react'
 import {StyleSheet, Text, View, Image} from 'react-native'
-import {Form, Item, Input, Button, Container, Label, Content, Left, Body} from 'native-base';
+import {Form, Item, Input, Button,Content, Left, Body} from 'native-base';
 import signup from '../assets/images/signup.png';
 import {connect} from 'react-redux';
 import {createUser} from '../actions/UserActions';
+import KeyboardShift from '../components/KeyboardShift';
 
 
 class SignUp extends React.Component {
@@ -29,6 +30,8 @@ class SignUp extends React.Component {
   render() {
   
     return (
+      <KeyboardShift> 
+        {()=>(
         <Content>
           <Left />
           <Body>
@@ -85,6 +88,8 @@ class SignUp extends React.Component {
           
           </Body>
         </Content>
+        )}
+        </KeyboardShift>
     )
   }
 }

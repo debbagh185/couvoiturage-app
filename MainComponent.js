@@ -1,18 +1,21 @@
 import React, { Component } from 'react'
 import { Router, Scene, Drawer } from "react-native-router-flux";
-import {Container} from 'native-base';
+import {Container, Button, Text} from 'native-base';
 import LoginScreen from './screens/LoginScreen';
 import SignUpScreen from './screens/SignUpScreen';
 import HomeScreen from './screens/HomeScreen';
 import ChatScreen from './screens/ChatScreen';
 import ChercherTrajetScreen from './screens/ChercherTrajet/ChercherTrajetScreen';
 import ProposerTrajetScreen from './screens/ProposerTrajet/ProposerTrajetScreen';
+import ProposerAdScreen from './screens/ProposerTrajet/ProposerAdScreen';
 import MenuScreen from './screens/MenuScreen';
 import MapScreen from './screens/MapScreen'
 import {StyleSheet} from 'react-native'
 import ProfileScreen from './screens/ProfileScreen';
 import ListTrajetScreen from './screens/ChercherTrajet/ListeTrajetScreen';
 import MenuBackIcon from './assets/images/back.png'
+import ProposerSuccessScreen from './screens/ProposerTrajet/ProposerSuccessScreen'
+ 
 
 
 
@@ -31,23 +34,24 @@ export default class MainComponent extends Component {
     return (
     <Container>
       <Router>
-          <Scene key='root'>
+          <Scene backButtonImage={MenuBackIcon} key='root'>
               <Drawer
               hideNavBar
-              hideTabBar
               key="drawerMenu"
               contentComponent={MenuScreen}
-              backButtonImage={MenuBackIcon}
               drawerWidth={250}
-              drawerPosition="left">
+              drawerPosition="right"
+              back >
               <Scene key='_profile' component={ProfileScreen} title='Profile'/>
               <Scene key='_login' component={LoginScreen} title='Login'/>
               <Scene initial key='_home' component={HomeScreen} title='Home'/>
               <Scene key='_chat' component={ChatScreen} title='Chat'/>
               <Scene key='_signup' component={SignUpScreen} title='Sign Up'/>
               <Scene key='_chercher' component={ChercherTrajetScreen} title='Chercher un trajet'/>
-              <Scene key='_proposer' component={ProposerTrajetScreen} title='Proposer un trajet'/>
+              <Scene key='_proposer' component={ProposerTrajetScreen} title='Proposer un trajet : Etape 1'/>
+              <Scene key='_proposer2' component={ProposerAdScreen} title='Proposer un trajet : Etape 2'/>
               <Scene key='_list' component={ListTrajetScreen} title='Liste des trajets'/>
+              <Scene key='_proposerSuccess' component={ProposerSuccessScreen} title='Publié avec succès!'/>
               <Scene key='_map' component={MapScreen} title='Map'/>
               </Drawer>
           </Scene>

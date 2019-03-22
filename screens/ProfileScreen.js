@@ -1,13 +1,10 @@
 import React, { Component } from 'react';
-import { Container, Tab, Tabs, Text } from 'native-base';
+import { Container, Tab, Tabs,  Content, List, ListItem, Thumbnail, Text, Left, Body, Right, Button  } from 'native-base';
 import store from '../store/configureStore'
-import {watchUserData} from '../actions/UserActions'
-import {connect} from 'react-redux'
 
-class ProfileScreen extends Component {
+export default class ProfileScreen extends Component {
   constructor(props){
     super(props);
-    this.props.watchUserData()
    
  }
   render() {
@@ -19,10 +16,70 @@ class ProfileScreen extends Component {
                 <Text>{store.getState().User.userData.email}</Text>
           </Tab>
           <Tab heading="Les trajets">
-             
+              <Content>
+              <List>
+                <ListItem thumbnail>
+                  <Left>
+                    <Thumbnail square source={{ uri: 'Image URL' }} />
+                  </Left>
+                  <Body>
+                    <Text>Sankhadeep</Text>
+                    <Text note numberOfLines={1}>Its time to build a difference . .</Text>
+                  </Body>
+                  <Right>
+                    <Button transparent>
+                      <Text>View</Text>
+                    </Button>
+                  </Right>
+                </ListItem>
+              </List>
+            </Content>
           </Tab>
           <Tab heading="Les demandes">
-             
+            <Container>
+              <Tabs>
+                <Tab heading="Envoyé">
+                    <Content>
+                      <List>
+                        <ListItem thumbnail>
+                          <Left>
+                            <Thumbnail square source={{ uri: 'Image URL' }} />
+                          </Left>
+                          <Body>
+                            <Text>Sankhadeep</Text>
+                            <Text note numberOfLines={1}>Its time to build a difference . .</Text>
+                          </Body>
+                          <Right>
+                            <Button transparent>
+                              <Text>View</Text>
+                            </Button>
+                          </Right>
+                        </ListItem>
+                      </List>
+                    </Content>
+                </Tab>
+                <Tab heading="Reçu">
+                    <Content>
+                      <List>
+                        <ListItem thumbnail>
+                          <Left>
+                            <Thumbnail square source={{ uri: 'Image URL' }} />
+                          </Left>
+                          <Body>
+                            <Text>Sankhadeep</Text>
+                            <Text note numberOfLines={1}>Its time to build a difference . .</Text>
+                          </Body>
+                          <Right>
+                            <Button transparent>
+                              <Text>View</Text>
+                            </Button>
+                          </Right>
+                        </ListItem>
+                      </List>
+                    </Content>
+                </Tab>
+              </Tabs>
+            </Container>
           </Tab>
         </Tabs>
       </Container>
@@ -30,17 +87,3 @@ class ProfileScreen extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return { 
-    userData: state.User.userData,
-    loggedin: state.User.loggedin,
-  };
-}
-
-const mapDispatchToProps = (dispatch) => {
-  return { 
-    watchUserData: () => dispatch(watchUserData()),
-  };
-}
-
-export default connect(mapStateToProps,mapDispatchToProps)(ProfileScreen);

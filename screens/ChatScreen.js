@@ -1,6 +1,8 @@
 import React from "react";
 
 import { GiftedChat } from "react-native-gifted-chat";
+import KeyboardShift from '../components/KeyboardShift';
+import Backend from '../components/Backend'
 
 
 export default class ChatScreen extends React.Component {
@@ -10,28 +12,32 @@ export default class ChatScreen extends React.Component {
   componentWillMount() {}
   render() {
     return (
+    <KeyboardShift> 
+      {()=>(
       <GiftedChat
         messages={this.state.messages}
         onSend={message => {
-          //ChatModel.sendMessage(message);
+          Backend.sendMessage(message);
         }}
         user={{
-          _id: 1/*ChatModel.getUid()*/,
+          _id: Backend.getUid(),
           name: 'test'
         }}
       />
+      )}
+    </KeyboardShift>
     );
   }
   componentDidMount() {
-    /*ChatModel.loadMessages(message => {
+    Backend.loadMessages(message => {
       this.setState(previousState => {
         return {
           messages: GiftedChat.append(previousState.messages, message)
         };
       });
-    });*/
+    });
   }
   componentWillUnmount() {
-    //ChatModel.closeChat();
+    Backend.closeChat();
   }
 }

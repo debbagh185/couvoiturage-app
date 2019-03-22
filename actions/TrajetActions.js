@@ -1,5 +1,8 @@
-import * as firebase from "firebase";
-import objects from '../constants/objects'
+import store from '../store/configureStore'
+import * as firebase from 'firebase'
+import 'firebase/firestore';
+
+
 
 if (!firebase.apps.length) { //avoid re-initializing
   firebase.initializeApp({
@@ -12,6 +15,7 @@ if (!firebase.apps.length) { //avoid re-initializing
   });
  }
 
+var db=firebase.firestore();
 
 export const PrepareDatabase = () => {
     return {
@@ -19,10 +23,10 @@ export const PrepareDatabase = () => {
     };
   };
 
-export const GetAdsResult = (Ads) => {
+export const GetAdsResult = (result) => {
     return {
       type: "GetAdResult",
-      value: Ads
+      value: result
     };
   };
 
@@ -32,127 +36,122 @@ export const ProposerAd = () => {
     };
   };
 
-  const Ads=[]
+export const StorePathObject = (path) => {
+    return {
+      type: "StorePathObject",
+      value: path
+    };
+};
 
-export const getAdsResult=(depart,dest,date)=>{
+var resultArray=[];
+
+var pathObject={
+      pathData:{},
+      path_id:"",
+      ads: []
+}
+
+var adObject={
+    id_ad: "",
+    prixParPlace: "",
+    nbrPlaces: "",
+    jourBack: "",
+    heureBack: "",
+    userData:{},
+    user_id:""
+}
+
+storeAdObject= (ad,user) =>
+{
+      adObject.id_ad=ad.id;
+      adObject.nbrPlaces=ad.data().nbrPlaces;
+      adObject.prixParPlace=ad.data().prixParPlace;
+      adObject.jourBack=ad.data().jourBack;
+      adObject.heureBack=ad.data().heureBack;
+      adObject.userData=user.data();
+      adObject.user_id=user.id;
+}
+
+export const getAdsResult = (path) => {
   return function(dispatch){
-    
-      firebase.database().ref(`Depart_Destination_Date_Ad/${depart.id} to ${dest.id} on ${date}`).on('value', function (snapshot)
-      {     
- 
-            var val = snapshot.val();
-            //console.log(JSON.stringify(val))
-            var array = Object.values(val)
+    db.collection("paths").where("destination", "==", path.destCity.id)
+    .get()
+    .then(function(querySnapshot) {
+        querySnapshot.forEach(function(docPath) {
+          db.collection('paths').doc(docPath.id)
+          .collection('users').get()
+          .then((usersSnapshot) => {
+            usersSnapshot.forEach((docUser) => {
+              db.collection('paths').doc(docPath.id)
+                .collection('users').doc(docUser.id).collection("ads").get()
+                .then((adsSnapshot) => {
+                  adsSnapshot.forEach((docAd) => {
+                    /****************************************** */
+                    storeAdObject(docAd,docUser);
+                    /****************************************** */
+                    pathObject.ads.push(adObject);
+                });
+              });
+            });
+          });
+          pathObject.path_id=docPath.id;
+          pathObject.pathData=docPath.data();
+          resultArray.push(pathObject);
+        });
+        
+        var actionGetAds = GetAdsResult(resultArray);
+        dispatch(actionGetAds);
+    })
+    .catch(function(error) {
+        console.log("Error getting documents: ", error);
+    });
 
-            console.log(array)
-
-            for(var i=0;i<array.length;i++){
-              firebase.database().ref(`Ads/${array[i].id_ad}`).on('value', function (snapshot)
-                  {     
-
-                      Ads.push(snapshot.val());
-    
-                }, function(error) { console.log(error); }); 
-            }
-
-            console.log(Ads)
-
-            
-
-            var actionGetAdResult = GetAdsResult(Ads);
-            dispatch(actionGetAdResult);
-
-      }, function(error) { console.log(error); }); 
-      
   }
+  
+
 }
 
 
-export const prepareDatabase = () => {
-  return function(dispatch) {
+storeAdOfUser = (ad,path_id,user_id) =>{
 
-    var path=objects.Paths[0];
-    var car=objects.Cars[1];
-    var ad=objects.Ads[0];
-
-    storeCities();
-    storePath(path);
-    storeAd(ad);
-    Depart_Destination_Date_Ad_Relationship(ad,path)
-    //Ad_Car_Relationship(ad,car);
-    //Car_Ad_Relationship(ad,car);
-    Path_Ad_Relationship(ad,path);
-   
-    //************************************************ */
-    var actionPrepareDatabase = PrepareDatabase();
-    dispatch(actionPrepareDatabase);                  
-  }
-}
-
-//Enregistrer les villes de maroc avec ses informations
-storeCities=()=>{
-  objects.Cities.map((item) => {
-    firebase.database().ref('Cities/' + item.id).set({
-    id: item.id,
-    name: item.name,
-    lng: item.lng,
-    lat : item.lat
-  });
-  });
-}
-
-//Ajouter un trajet 
-storePath=(path)=>{
-  firebase.database().ref('Paths/' + path.id).set({
-    id: path.id,
-    dateAller: path.dateAller,
-    dateRoteur: path.dateRoteur
-  })
-}
-
-//Pour trouver un trajet a partir d'une ville de destination
-Depart_Destination_Date_Ad_Relationship=(ad,path)=>{
-  firebase.database().ref(`Depart_Destination_Date_Ad/${path.dep.id} to ${path.dest.id} on ${path.dateAller.jour} ${path.dateAller.heure}`).push({
-    id_ad : ad.id,
-  })
-}
-
-//Ajouter un vehicule 
-storeCar=(car)=>{
-  firebase.database().ref('Cars/' + car.id).set({
-    id: car.id,
-    vehicule: car.vehicule
-  })
-}
-
-//Pour trouver un vehicule d'un trajet
-Ad_Car_Relationship=(ad,car)=>{
-  firebase.database().ref('Ad_Car/' + ad.id).set({
-    car_id : car.id,
-  })
-}
-
-//trouver un trajet a partir du vehicule
-Car_Ad_Relationship=(ad,car)=>{
-  firebase.database().ref('Car_Ad/' + car.id).set({
-    ad_id : ad.id,
-  })
-}
-
-//trouver une annonce a partir d'un trajet
-Path_Ad_Relationship=(ad,path)=>{
-  firebase.database().ref('Path_Ad/' + path.id).set({
-    id_ad : ad.id,
-  })
-}
-
-//Ajouter une annonce
-storeAd=(ad)=>{
-  firebase.database().ref('Ads/' + ad.id).set({
-    id:ad.id,
-    prixParPlace:ad.prixParPlace,
+  db.collection("paths").doc(path_id).collection("users").doc(user_id).collection("ads").add({
+    prixParPlace: ad.prixParPlace,
     nbrPlaces: ad.nbrPlaces,
-    path: ad.path
+    jourBack: ad.dateBack.jour,
+    heureBack: ad.dateBack.heure
   })
+
+}
+
+storeUserAd = (path_id,user_id) => {
+
+  let user=store.getState().User.userData;
+
+  db.collection("paths").doc(path_id).collection("users").doc(user_id).set(user);
+
+}
+
+export const proposerAd= (ad, path) => {
+ 
+  return function(dispatch){
+
+    let path_id=path.departCity.id +"_"+ path.destCity.id +"_"+ path.dateAller.jour +"_"+ path.dateAller.heure;
+    let user_id=firebase.auth().currentUser.uid;
+    const pathsRef = db.collection('paths').doc(path_id);
+
+          pathsRef.set({
+            depart: path.departCity.id,
+            destination: path.destCity.id,
+            jourAller: path.dateAller.jour,
+            heureAller: path.dateAller.heure
+          }).then(function(docRef) {
+            storeUserAd(path_id,user_id);
+            storeAdOfUser(ad,path_id,user_id);
+            console.log("Document written with ID: ", docRef.id);
+          });
+
+    var actionProposerAd = ProposerAd();
+    dispatch(actionProposerAd);
+  }
 }
 

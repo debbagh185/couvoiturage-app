@@ -22,17 +22,14 @@ let objects = {
     ],
     Cars:[
         {
-            id:"car1",
             vehicule:"Ma-45876022",
         },
         {
-            id:"car2",
             vehicule:"Ma-85214796",
         }
     ],
     Paths:[
         {
-            id:"path1",
             dep:{
                 id:"chichaoua",
                 name: "Chichaoua, Maroc",
@@ -52,7 +49,6 @@ let objects = {
             dateRoteur:{}
         },
         {
-            id:"path2",
             dep:{
                 id:"marrakech",
                 name: "Marrakech, Maroc",
@@ -75,9 +71,12 @@ let objects = {
     ],
     Ads:[
         {
-            id:"ad1",
             prixParPlace:"40Dh",
             nbrPlaces: 2
+        },
+        {
+            prixParPlace:"30Dh",
+            nbrPlaces: 1
         }
     ],
     

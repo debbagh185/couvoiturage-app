@@ -5,6 +5,7 @@ import {Actions} from 'react-native-router-flux';
 import login from '../assets/images/login.png';
 import {connect} from 'react-redux';
 import {loginUser} from '../actions/UserActions';
+import KeyboardShift from '../components/KeyboardShift';
 
 
 class LoginScreen extends Component {
@@ -20,7 +21,8 @@ class LoginScreen extends Component {
 
   render() {
     return (
-
+    <KeyboardShift> 
+        {()=>(
       <Container style={styles.container}>
           <Image source={login} />
           <Form>
@@ -63,6 +65,8 @@ class LoginScreen extends Component {
         </View>
 
       </Container>
+        )}
+    </KeyboardShift>
 
     );
   }

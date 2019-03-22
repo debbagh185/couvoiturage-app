@@ -14,14 +14,24 @@ import {watchUserData, testAuth} from '../actions/UserActions';
 class HomeScreen extends Component {
   constructor(props){
     super(props);
-    this.props.testAuth();
+    this.state={
+      oneTime:true
+    }
+
  }
 
+ componentWillMount(){
+  this.props.testAuth(); 
+ }
+
+ componentDidMount(){
+  if(this.props.loggedin && this.state.oneTime) {
+    this.props.watchUserData();
+    this.setState({oneTime: false});
+  }
+ }
 
   render() { 
-    if (false) {
-      return <LoadingComp />;
-      }
       return (
         <View style={{flex:1}}>
           <Content>

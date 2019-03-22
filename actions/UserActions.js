@@ -1,6 +1,6 @@
-import * as firebase from "firebase";
 import { Actions } from "react-native-router-flux";
-import store from '../store/configureStore'
+import * as firebase from 'firebase'
+import 'firebase/firestore';
 
 if (!firebase.apps.length) { //avoid re-initializing
   firebase.initializeApp({
@@ -12,6 +12,9 @@ if (!firebase.apps.length) { //avoid re-initializing
     messagingSenderId: "155192066303"
   });
  }
+
+
+var db=firebase.firestore();
 
 export const setUserData = (userData) => {
     return {
@@ -54,14 +57,25 @@ export const testAuth = () => {
 
 export const watchUserData = () => {
     return function(dispatch) {
-                let uid=firebase.auth().currentUser.uid;
-                firebase.database().ref(`Users/${uid}`).on('value', function (snapshot)
-                  { 
-                        var userData = snapshot.val();
-                        console.log(userData);
-                        var actionSetUserData = setUserData(userData);
-                        dispatch(actionSetUserData);
-                  }, function(error) { console.log(error); });   
+
+      let uid=firebase.auth().currentUser.uid;
+      var docRef = db.collection("users").doc(uid);
+
+      docRef.get().then(function(doc) {
+          if (doc.exists) {
+             var userData = doc.data();
+             console.log(userData);
+             var actionSetUserData = setUserData(userData);
+             dispatch(actionSetUserData);
+             console.log("Document data:", userData);
+          } else {
+              // doc.data() will be undefined in this case
+              console.log("No such document!");
+          }
+      }).catch(function(error) {
+          console.log("Error getting document:", error);
+      });
+
     }
   };
 
@@ -98,39 +112,25 @@ export const loginUser = (email,password) => {
 
 export const createUser= (user) => {
     return function(dispatch){
-        const{
-            firstName,
-            lastName,
-            userName,
-            email,
-            password
-          } = user;
       
-          firebase.auth().createUserWithEmailAndPassword(email , password).then(()=>{
+          firebase.auth().createUserWithEmailAndPassword(user.email , user.password).then(()=>{
 
             var uid=firebase.auth().currentUser.uid;
-
-            firebase.database().ref(`Users/${uid}`).set({
-                firstName,
-                lastName,
-                userName,
-                email,
-                password,
-        
-            }).then((data)=>{
-                var actionSignUpUser = SignUpUser();
-                dispatch(actionSignUpUser);
-                console.log('data ' , data)
-                Actions._home();
-
-            }).catch((error)=>{
-                //error callback
-                console.log('error ' , error)
+            
+            db.collection("users").doc(uid).set(user)
+            .then(function() {
+              console.log("Document successfully written!");
+              var actionSignUpUser = SignUpUser();
+              dispatch(actionSignUpUser);
+              Actions._home();
+            })
+            .catch(function(error) {
+                console.error("Error writing document: ", error);
             });
-          }) ;
     
-    }
+    })
     
+  }
 
 }
 
