@@ -11,7 +11,7 @@ if (!firebase.apps.length) { //avoid re-initializing
     storageBucket: "my-react-app-33cb1.appspot.com",
     messagingSenderId: "155192066303"
   });
- }
+}
 
 
 var db=firebase.firestore();

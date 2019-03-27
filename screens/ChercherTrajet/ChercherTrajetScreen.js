@@ -57,7 +57,7 @@ class ChercherTrajetScreen extends Component {
   handlePicker = (date) => {
     this.hidePicker();
     let newPath = Object.assign({}, this.state.path);
-    moment.locale('fr');
+    moment(date).locale();
     newPath.dateAller.jour=moment(date).format('D MMMM YYYY');
     newPath.dateAller.heure=moment(date).format('HH:mm');
     this.setState({path: newPath});
@@ -167,6 +167,7 @@ class ChercherTrajetScreen extends Component {
                     onConfirm={this.handlePicker}
                     onCancel={this.hidePicker}
                     mode={"datetime"}
+                    minimumDate={new Date()}
                   />
             </View>
               

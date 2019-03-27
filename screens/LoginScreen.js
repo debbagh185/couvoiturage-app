@@ -6,7 +6,7 @@ import login from '../assets/images/login.png';
 import {connect} from 'react-redux';
 import {loginUser} from '../actions/UserActions';
 import KeyboardShift from '../components/KeyboardShift';
-import validation from '../components/Validation';
+import validationLogin from '../components/Validation';
 
 var validate= require("validate.js");
 
@@ -24,17 +24,15 @@ class LoginScreen extends Component {
   }
 
   register= ()=> {
-    Errors = validate({email: this.state.myemail , password: this.state.mypassword} , validation)
+    Errors = validate({email: this.state.myemail , password: this.state.mypassword} , validationLogin)
 
-    this.setState({
-      errors: Errors,
-    })
-
-    if (!Errors) {
-      alert('Details are valid!')
+    if(!Errors) {
+      this.props.loginUser(this.state.myemail , this.state.mypassword)
     }
     else{
-      alert(JSON.stringify(Errors))
+      this.setState({
+        errors: JSON.parse(JSON.stringify(Errors))
+      })
     }
   }
 
@@ -50,7 +48,8 @@ class LoginScreen extends Component {
               autoCapitalize="none"
               placeholder="Email"
               autoCorrect={true}
-              onChangeText= {(email) => this.setState({['myemail']: email.trim()})}
+              keyboardType= "email-address"
+              onChangeText= {(email) => this.setState({myemail: email.trim()})}
             />
           </Item>
           <Item floatingLabel style={styles.item}>
@@ -59,7 +58,7 @@ class LoginScreen extends Component {
               autoCapitalize="none"
               autoCorrect
               placeholder="Password"
-              onChangeText= {(password) => this.setState({['mypassword']: password.trim()})}
+              onChangeText= {(password) => this.setState({mypassword: password.trim()})}
             />
           </Item>
         </Form>
@@ -68,9 +67,7 @@ class LoginScreen extends Component {
           <Button 
             primary 
             style={styles.butt}
-            onPress= {() => this.register()
-              //this.props.loginUser(this.state.myemail , this.state.mypassword)
-            }>
+            onPress= {() => this.register()}>
             <Text style={{color: 'white'}}>Login</Text>
           </Button>
           <Button 
@@ -82,6 +79,8 @@ class LoginScreen extends Component {
             <Text style={{color: 'green'}}>Sign Up</Text>
           </Button>
         </View>
+        <Text style= {styles.error}> {this.state.errors["email"]} </Text>
+        <Text style= {styles.error}> {this.state.errors["password"]} </Text>
       </Container>
         )}
     </KeyboardShift>
@@ -107,6 +106,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     width: 150,
   },
+
+  error: {
+    color: 'red',
+    marginTop: 15
+  }
 });
 
 

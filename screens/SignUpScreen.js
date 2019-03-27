@@ -5,26 +5,39 @@ import signup from '../assets/images/signup.png';
 import {connect} from 'react-redux';
 import {createUser} from '../actions/UserActions';
 import KeyboardShift from '../components/KeyboardShift';
+import {validationSignUp} from '../components/Validation'
 
+var validate = require("validate.js");
 
 class SignUp extends React.Component {
 
- constructor(props) {
+  constructor(props) {
+    super(props);
+    this.state = {
+      user: {
+        firstName: '', 
+        lastName: '', 
+        userName: '', 
+        email: '', 
+        password: '',
+        phone: ''
+      },
+        
+      errors: {}
+    }  
+  }
 
-   super(props);
-   this.state = {
-       firstName: '', 
-       lastName: '', 
-       userName: '', 
-       email: '', 
-       password: ''
+  register= ()=> {
+    Errors = validate({email: this.state.user.email , password: this.state.user.password , phone: this.state.user.phone } , validationSignUp)
+
+    if(!Errors) {
+      this.props.createUser(this.state.user)
     }
-    
- }
-
-
-  onChangeText = (key, val) => {
-    this.setState({ [key]: val })
+    else{
+      this.setState({
+        errors: JSON.parse(JSON.stringify(Errors))
+      })
+    }
   }
 
   render() {
@@ -37,43 +50,75 @@ class SignUp extends React.Component {
           <Body>
              <Image source={signup} />
           <Form>
-            <Item floatingLabel style={styles.item}>
+            <Item style={styles.item}>
               <Input 
               placeholder="First Name"
               autoCapitalize="none"
               autoCorrect={false}   
-              onChangeText={(val) => this.onChangeText('firstName', val)} />
+              onChangeText={(val) => {
+                let newUser= Object.assign({} , this.state.user)
+                newUser.firstName= val.trim()
+                this.setState({user: newUser})
+              }} />
             </Item>
-            <Item floatingLabel style={styles.item}>
+            <Item style={styles.item}>
               <Input 
               placeholder="Last Name"
               autoCapitalize="none"
               autoCorrect
-              onChangeText={(val) => this.onChangeText('lastName', val)}/>
+              onChangeText={(val) => {
+                let newUser= Object.assign({} , this.state.user)
+                newUser.lastName= val.trim()
+                this.setState({user: newUser})
+              }}/>
             </Item>
-            <Item floatingLabel style={styles.item}>
+            <Item style={styles.item}>
               <Input 
               placeholder="Username"
               autoCapitalize="none"
               autoCorrect 
-              onChangeText={(val) => this.onChangeText('userName', val)}/>
+              onChangeText={(val) => {
+                let newUser= Object.assign({} , this.state.user)
+                newUser.firstName= val.trim()
+                this.setState({user: newUser})
+              }}/>
             </Item>
-            <Item floatingLabel style={styles.item}>
+            <Item style={styles.item}>
               <Input 
               placeholder="Email"
               autoCapitalize="none"
               autoCorrect={false} 
-              
-              onChangeText={(val) => this.onChangeText('email', val)}/>
+              keyboardType= "email-address"
+              onChangeText={(val) => {
+                let newUser= Object.assign({} , this.state.user)
+                newUser.email= val.trim()
+                this.setState({user: newUser})
+              }}/>
             </Item>
-            <Item floatingLabel style={styles.item}>
+            <Item style={styles.item}>
               <Input
               placeholder="Password"
                 autoCapitalize="none"
                 autoCorrect
                 secureTextEntry={true}
-                onChangeText={(val) => this.onChangeText('password', val)}
+                onChangeText={(val) => {
+                  let newUser= Object.assign({} , this.state.user)
+                  newUser.password= val.trim()
+                  this.setState({user: newUser})
+                }}
                />
+            </Item>
+            <Item style={styles.item}>
+              <Input 
+              placeholder="Phone Number"
+              autoCapitalize="none"
+              autoCorrect 
+              keyboardType= "phone-pad"
+              onChangeText={(val) => {
+                let newUser= Object.assign({} , this.state.user)
+                newUser.phone= val.trim()
+                this.setState({user: newUser})
+              }}/>
             </Item>
           </Form>
           <Left />
@@ -81,11 +126,14 @@ class SignUp extends React.Component {
             <Button 
             primary
             style={styles.butt} 
-            onPress={() => this.props.createUser(this.state)}>
+            onPress={() => this.register() }>
             <Text style={{color: 'white'}}>Sign Up</Text>
             </Button>
           </Body>
           
+          <Text style= {styles.error}> {this.state.errors["email"]} </Text>
+          <Text style= {styles.error}> {this.state.errors["password"]} </Text>
+          <Text style= {styles.error}> {this.state.errors["phone"]} </Text>
           </Body>
         </Content>
         )}
@@ -111,6 +159,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     width: 150,
   },
+
+  error: {
+    color: 'red',
+    marginTop: 15
+  }
 });
 
 const mapDispatchToProps = (dispatch) => {
