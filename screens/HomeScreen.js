@@ -7,7 +7,6 @@ import path from '../assets/images/path.png'
 import search from '../assets/images/search.png'
 import {Actions} from 'react-native-router-flux'
 import FooterComp from '../components/FooterComp';
-import LoadingComp from '../components/LoadingComp';
 import {connect} from 'react-redux';
 import {watchUserData, testAuth} from '../actions/UserActions';
 

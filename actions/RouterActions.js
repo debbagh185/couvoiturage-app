@@ -1,13 +1,13 @@
-export const ChangePreviousPage = (page) => {
+export const StoreAd = (ad) => {
     return {
-        type: "ChangePreviousPage",
-        value: page
+      type : "StoreClickedAd",
+      value: ad
     }
 }
 
-export const changePage = (page) =>{
+export const StoreClickedAd = (ad) =>{
     return function(dispatch){
-        var ActionChangePage=ChangePreviousPage(page);
-        dispatch(ActionChangePage);
+        var ActionStoreClickedAd=StoreAd(ad);
+        dispatch(ActionStoreClickedAd);
     }
 }
