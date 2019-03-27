@@ -6,6 +6,9 @@ import login from '../assets/images/login.png';
 import {connect} from 'react-redux';
 import {loginUser} from '../actions/UserActions';
 import KeyboardShift from '../components/KeyboardShift';
+import validation from '../components/Validation';
+
+var validate= require("validate.js");
 
 
 class LoginScreen extends Component {
@@ -14,9 +17,25 @@ class LoginScreen extends Component {
     super(props)
     this.state= ({
       myemail: "",
-      mypassword: ""
+      mypassword: "",
+      errors: {}
     })
 
+  }
+
+  register= ()=> {
+    Errors = validate({email: this.state.myemail , password: this.state.mypassword} , validation)
+
+    this.setState({
+      errors: Errors,
+    })
+
+    if (!Errors) {
+      alert('Details are valid!')
+    }
+    else{
+      alert(JSON.stringify(Errors))
+    }
   }
 
   render() {
@@ -24,14 +43,14 @@ class LoginScreen extends Component {
     <KeyboardShift> 
         {()=>(
       <Container style={styles.container}>
-          <Image source={login} />
-          <Form>
-          <Item floatingLabel style={styles.item}>
+        <Image source={login} />
+        <Form>
+          <Item  floatingLabel style={styles.item}>
             <Input
               autoCapitalize="none"
               placeholder="Email"
               autoCorrect={true}
-              onChangeText= {(email) => this.setState({['myemail']: email})}
+              onChangeText= {(email) => this.setState({['myemail']: email.trim()})}
             />
           </Item>
           <Item floatingLabel style={styles.item}>
@@ -40,30 +59,29 @@ class LoginScreen extends Component {
               autoCapitalize="none"
               autoCorrect
               placeholder="Password"
-              onChangeText= {(password) => this.setState({['mypassword']: password})}
+              onChangeText= {(password) => this.setState({['mypassword']: password.trim()})}
             />
           </Item>
         </Form>
 
         <View>
-        <Button 
-          primary 
-          style={styles.butt}
-          onPress= {() => this.props.loginUser(this.state.myemail , this.state.mypassword)}>
-          <Text style={{color: 'white'}}>Login</Text>
+          <Button 
+            primary 
+            style={styles.butt}
+            onPress= {() => this.register()
+              //this.props.loginUser(this.state.myemail , this.state.mypassword)
+            }>
+            <Text style={{color: 'white'}}>Login</Text>
           </Button>
           <Button 
-          bordered 
-          primary 
-          style={styles.butt}
-          onPress={() => {
-            Actions._signup()
-          }}
-          >
-          <Text style={{color: 'green'}}>Sign Up</Text>
-        </Button>
+            bordered 
+            primary 
+            style={styles.butt}
+            onPress={() => { Actions._signup() }}
+            >
+            <Text style={{color: 'green'}}>Sign Up</Text>
+          </Button>
         </View>
-
       </Container>
         )}
     </KeyboardShift>

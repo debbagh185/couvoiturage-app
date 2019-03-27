@@ -8,7 +8,7 @@ import SearchableDropdown from 'react-native-searchable-dropdown'
 import objects from '../../constants/objects'
 import KeyboardShift from '../../components/KeyboardShift';
 import {getAdsResult} from '../../actions/TrajetActions'
-import { Actions } from 'react-native-router-flux';
+import { Actions } from 'react-native-router-flux'; 
  
 
 //Item array for the dropdown
