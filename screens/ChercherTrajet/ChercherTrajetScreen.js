@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import {Text, StyleSheet, TouchableOpacity, View} from 'react-native';
 import DateTimePicker from 'react-native-modal-datetime-picker';
-import {Form,Button, Content, Icon, Container, Spinner, Separator, Left, Body} from 'native-base';
+import {Form,Button, Content, Icon, Container, Spinner, Separator, Left, Body, Footer, FooterTab} from 'native-base';
 import moment from 'moment';
 import {connect} from 'react-redux';
 import SearchableDropdown from 'react-native-searchable-dropdown'
@@ -57,6 +57,7 @@ class ChercherTrajetScreen extends Component {
   handlePicker = (date) => {
     this.hidePicker();
     let newPath = Object.assign({}, this.state.path);
+    moment.locale('fr');
     newPath.dateAller.jour=moment(date).format('D MMMM YYYY');
     newPath.dateAller.heure=moment(date).format('HH:mm');
     this.setState({path: newPath});
@@ -184,7 +185,7 @@ class ChercherTrajetScreen extends Component {
                           this.setState({spinner: <Text style={{color: 'white'}}>Chercher</Text>})
                           alert("Problem de connexion internet, réessayer!")
                         }
-                      }, 5000);
+                      }, 10000);
                     }}
                   >
                   {this.state.spinner}
@@ -195,6 +196,13 @@ class ChercherTrajetScreen extends Component {
         </Form> 
       </Content>
       </Container>
+      <Footer>
+        <FooterTab>
+          <Button onPress={()=> Actions.pop() } vertical>
+            <Icon name="arrow-back" />
+          </Button>
+        </FooterTab>
+      </Footer>
       </View>
       )}
     </KeyboardShift>  

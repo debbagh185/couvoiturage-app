@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Router, Scene, Drawer } from "react-native-router-flux";
+import { Router, Scene, Drawer, Actions } from "react-native-router-flux";
 import {Container, Button, Text} from 'native-base';
 import LoginScreen from './screens/LoginScreen';
 import SignUpScreen from './screens/SignUpScreen';
@@ -15,6 +15,7 @@ import ProfileScreen from './screens/ProfileScreen';
 import ListTrajetScreen from './screens/ChercherTrajet/ListeTrajetScreen';
 import MenuBackIcon from './assets/images/back.png'
 import ProposerSuccessScreen from './screens/ProposerTrajet/ProposerSuccessScreen'
+import AdDetailsScreen from './screens/ChercherTrajet/AdDetailsScreen';
  
 
 
@@ -24,19 +25,27 @@ export default class MainComponent extends Component {
   constructor(props){
     super(props);
     this.state=({
-       
+      isReady: false,
     })
-    
-  }
+  }  
+
+  async componentWillMount() {
+    await Expo.Font.loadAsync({
+    Roboto: require("native-base/Fonts/Roboto.ttf"),
+    Roboto_medium: require("native-base/Fonts/Roboto_medium.ttf"),
+    Ionicons: require("@expo/vector-icons/fonts/Ionicons.ttf")
+    });
+    this.setState({ isReady: true });
+    }
 
   render() {
-    
+    if (!this.state.isReady) {
+      return <Expo.AppLoading />;
+      }
     return (
     <Container>
-      <Router>
-          <Scene backButtonImage={MenuBackIcon} key='root'>
+      <Router>    
               <Drawer
-              hideNavBar
               key="drawerMenu"
               contentComponent={MenuScreen}
               drawerWidth={250}
@@ -53,8 +62,8 @@ export default class MainComponent extends Component {
               <Scene key='_list' component={ListTrajetScreen} title='Liste des trajets'/>
               <Scene key='_proposerSuccess' component={ProposerSuccessScreen} title='Publié avec succès!'/>
               <Scene key='_map' component={MapScreen} title='Map'/>
-              </Drawer>
-          </Scene>
+              <Scene key='_adDetails' component={AdDetailsScreen} title="Des information sur l'annonce"/>
+              </Drawer>  
       </Router>
   </Container>
 

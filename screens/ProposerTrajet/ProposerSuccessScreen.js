@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Container, Content, Button, Text} from 'native-base';
+import { Container, Content, Button, Text, Footer, FooterTab, Icon} from 'native-base';
 import store from '../../store/configureStore'
 import {Actions} from 'react-native-router-flux'
 import {View} from 'react-native'
@@ -18,6 +18,13 @@ export default class ProposerSuccessScreen extends Component {
            <Button primary><Text>Voir vos annonces</Text></Button>
         </Content>
       </Container>
+      <Footer>
+        <FooterTab>
+          <Button onPress={()=> Actions._proposer() } vertical>
+            <Icon name="arrow-back" />
+          </Button>
+        </FooterTab>
+      </Footer>
     </View>
       
      
